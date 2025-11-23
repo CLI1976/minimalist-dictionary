@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="極簡風格的英中字典 - 輸入單字查詢繁體中文翻譯和發音">
+    <meta name="keywords" content="字典,英文,中文,翻譯,發音">
+    <title>極簡字典</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="logo">
+                <span class="icon">📖</span>
+                極簡字典
+            </h1>
+            <p class="subtitle">簡單、優雅、實用</p>
+        </header>
+
+        <main class="main">
+            <div class="search-box">
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    class="search-input" 
+                    placeholder="輸入英文單字..."
+                    autocomplete="off"
+                    spellcheck="false"
+                >
+                <button id="searchBtn" class="search-btn" aria-label="搜尋">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <div id="resultContainer" class="result-container hidden">
+                <div class="result-card">
+                    <div class="word-header">
+                        <h2 id="wordTitle" class="word-title"></h2>
+                        <button id="pronounceBtn" class="pronounce-btn" aria-label="發音">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                                <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <div id="translations" class="translations"></div>
+                    
+                    <div id="loading" class="loading hidden">
+                        <div class="spinner"></div>
+                        <p>查詢中...</p>
+                    </div>
+                    
+                    <div id="error" class="error hidden"></div>
+                </div>
+            </div>
+
+            <div id="welcomeMessage" class="welcome-message">
+                <div class="welcome-icon">✨</div>
+                <h3>開始探索</h3>
+                <p>輸入任何英文單字，立即獲得繁體中文翻譯</p>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>資料來源：<a href="https://www.linguee.com" target="_blank" rel="noopener">Linguee</a></p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
