@@ -1,4 +1,4 @@
-/* ========================================
+﻿/* ========================================
    CSS Variables & Design System
    ======================================== */
 :root {
@@ -369,501 +369,198 @@ body {
     text-align: center;
     padding: var(--spacing-lg) 0;
     color: var(--color-text-secondary);
+    font-size: 0.875rem;
+    border-top: 1px solid var(--color-border);
+    margin-top: var(--spacing-xl);
+}
 
-    /* ========================================
-   Main Content
+.footer a {
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.footer a:hover {
+    color: var(--color-primary-dark);
+    text-decoration: underline;
+}
+
+/* ========================================
+   Animations
    ======================================== */
-    .main {
-        flex: 1;
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
     }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
-    /* ========================================
-   Result Container
+/* ========================================
+   閰批?摰儔璅??嚗dict.info ?游?嚗?
    ======================================== */
-    .result-container {
-        animation: fadeIn var(--transition-base);
-    }
 
-    .result-container.hidden {
-        display: none;
-    }
+/* ?單? */
+.phonetics {
+    display: inline-block;
+    margin-left: 12px;
+    color: #667eea;
+    font-family: 'Courier New', monospace;
+    font-size: 1rem;
+    font-weight: normal;
+}
 
-    .result-card {
-        background: var(--color-surface);
-        border-radius: var(--radius-lg);
-        padding: var(--spacing-lg);
-        box-shadow: 0 4px 20px var(--color-shadow);
-        border: 1px solid var(--color-border);
-    }
+/* 摰儔?憛?*/
+.definition-group {
+    margin-bottom: 24px;
+    padding: 20px;
+    background: linear-gradient(135deg, rgba(103, 126, 234, 0.04) 0%, rgba(118, 75, 162, 0.02) 100%);
+    border-radius: 16px;
+    border-left: 4px solid #667eea;
+    animation: fadeIn 0.3s ease-out;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
 
-    .word-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: var(--spacing-md);
-        padding-bottom: var(--spacing-md);
-        border-bottom: 2px solid var(--color-border);
-    }
+/* 閰扳?蝐?*/
+.pos-tag {
+    display: inline-block;
+    padding: 6px 16px;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 8px rgba(103, 126, 234, 0.3);
+}
 
-    .word-title {
-        font-size: 2rem;
-        font-weight: var(--font-weight-bold);
-        color: var(--color-text);
-        margin: 0;
-    }
+/* ??銵?*/
+.meaning-list {
+    margin: 12px 0;
+}
 
-    .pronounce-btn {
-        width: 48px;
-        height: 48px;
-        border: none;
-        border-radius: var(--radius-full);
-        background: linear-gradient(135deg, #667eea22 0%, #764ba222 100%);
-        color: var(--color-primary);
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all var(--transition-base);
-        flex-shrink: 0;
-    }
+.meaning-item {
+    margin: 12px 0;
+    padding-left: 28px;
+    position: relative;
+    line-height: 1.8;
+    color: #2d3748;
+    font-size: 1.05rem;
+}
 
-    .pronounce-btn:hover {
-        background: linear-gradient(135deg, #667eea33 0%, #764ba233 100%);
-        transform: scale(1.1);
-    }
+.meaning-item::before {
+    content: "??;
+    position: absolute;
+    left: 10px;
+    color: #667eea;
+    font-weight: bold;
+    font-size: 1.3rem;
+}
 
-    .pronounce-btn:active {
-        transform: scale(0.95);
-    }
+/* 靘 */
+.example-list {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed #e2e8f0;
+}
 
-    /* ========================================
-   Translations
-   ======================================== */
-    .translations {
-        display: flex;
-        flex-wrap: wrap;
-        gap: var(--spacing-sm);
-        margin-top: var(--spacing-md);
-    }
+.example-sentence {
+    margin: 8px 0 8px 28px;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 10px;
+    font-size: 0.9rem;
+    color: #718096;
+    font-style: italic;
+    line-height: 1.6;
+    border-left: 3px solid #e2e8f0;
+}
 
-    .translation-item {
-        padding: var(--spacing-sm) var(--spacing-md);
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-        border-radius: var(--radius-md);
-        font-size: 1.1rem;
-        color: var(--color-text);
-        transition: all var(--transition-fast);
-        border: 1px solid rgba(255, 255, 255, 0.5);
-    }
+/* 靘?璅酉 */
+.source-tag {
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid #e2e8f0;
+    text-align: center;
+    font-size: 0.8rem;
+    color: #a0aec0;
+}
 
-    .translation-item:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px var(--color-shadow-hover);
-    }
-
-    .translation-primary {
-        font-size: 1.3rem;
-        font-weight: var(--font-weight-semibold);
-        background: var(--gradient-primary);
-        color: white;
-    }
-
-    /* ========================================
-   Loading State
-   ======================================== */
-    .loading {
-        text-align: center;
-        padding: var(--spacing-xl);
-        color: var(--color-text-secondary);
-    }
-
-    .loading.hidden {
-        display: none;
-    }
-
-    .spinner {
-        width: 40px;
-        height: 40px;
-        margin: 0 auto var(--spacing-sm);
-        border: 3px solid var(--color-border);
-        border-top-color: var(--color-primary);
-        border-radius: var(--radius-full);
-        animation: spin 0.8s linear infinite;
-    }
-
-    @keyframes spin {
-        to {
-            transform: rotate(360deg);
-        }
-    }
-
-    /* ========================================
-   Error State
-   ======================================== */
-    .error {
-        padding: var(--spacing-md);
-        background: #FEE2E2;
-        color: #DC2626;
-        border-radius: var(--radius-md);
-        border-left: 4px solid #DC2626;
-        margin-top: var(--spacing-md);
-    }
-
-    .error.hidden {
-        display: none;
-    }
-
-    /* ========================================
-   Welcome Message
-   ======================================== */
-    .welcome-message {
-        text-align: center;
-        padding: var(--spacing-xl) var(--spacing-md);
-        color: var(--color-text-secondary);
-        animation: fadeIn var(--transition-slow);
-    }
-
-    .welcome-message.hidden {
-        display: none;
-    }
-
-    .welcome-icon {
-        font-size: 4rem;
-        margin-bottom: var(--spacing-md);
-        animation: float 3s ease-in-out infinite;
-    }
-
-    .welcome-message h3 {
-        font-size: 1.5rem;
-        font-weight: var(--font-weight-semibold);
-        color: var(--color-text);
-        margin-bottom: var(--spacing-sm);
-    }
-
-    .welcome-message p {
-        font-size: 1rem;
-        line-height: 1.8;
-    }
-
-    @keyframes float {
-
-        0%,
-        100% {
-            transform: translateY(0);
-        }
-
-        50% {
-            transform: translateY(-10px);
-        }
-    }
-
-    /* ========================================
-   Footer
-   ======================================== */
-    .footer {
-        text-align: center;
-        padding: var(--spacing-lg) 0;
-        color: var(--color-text-secondary);
-        font-size: 0.875rem;
-        border-top: 1px solid var(--color-border);
-        margin-top: var(--spacing-xl);
-    }
-
-    .footer a {
-        color: var(--color-primary);
-        text-decoration: none;
-        transition: color var(--transition-fast);
-    }
-
-    .footer a:hover {
-        color: var(--color-primary-dark);
-        text-decoration: underline;
-    }
-
-    /* ========================================
+/* ========================================
    Responsive Design
    ======================================== */
-    @media (max-width: 640px) {
-        .container {
-            padding: var(--spacing-md) var(--spacing-sm);
-        }
-
-        .header {
-            padding: var(--spacing-lg) 0;
-        }
-
-        .logo {
-            font-size: 1.75rem;
-        }
-
-        .icon {
-            font-size: 2rem;
-        }
-
-        .search-input {
-            font-size: 1rem;
-            padding: var(--spacing-sm) var(--spacing-md);
-            padding-right: 3.5rem;
-        }
-
-        .word-title {
-            font-size: 1.5rem;
-        }
-
-        .translation-item {
-            font-size: 1rem;
-        }
-
-        .translation-primary {
-            font-size: 1.2rem;
-        }
+@media (max-width: 640px) {
+    .container {
+        padding: var(--spacing-md) var(--spacing-sm);
     }
-
-    /* ========================================
-   詞性和定義樣式（cdict 整合）
-   ======================================== */
-
-    /* 音標 */
-    .phonetics {
-        display: inline-block;
-        margin-left: 12px;
-        color: #667eea;
-        font-family: 'Courier New', monospace;
-        font-size: 0.95rem;
-        font-weight: normal;
+    
+    .header {
+        padding: var(--spacing-lg) 0;
     }
-
-    /* 定義區塊 */
-    .definition-group {
-        margin-bottom: 20px;
-        padding: 16px;
-        background: rgba(103, 126, 234, 0.03);
-        border-radius: 12px;
-        border-left: 3px solid #667eea;
-        animation: fadeIn 0.3s ease-out;
+    
+    .logo {
+        font-size: 1.75rem;
     }
-
-    /* 詞性標籤 */
-    .pos-tag {
-        display: inline-block;
-        padding: 4px 12px;
-        margin-bottom: 12px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        border-radius: 16px;
-        font-size: 0.8rem;
-        font-weight: 600;
-        letter-spacing: 0.5px;
+    
+    .icon {
+        font-size: 2rem;
     }
-
-    /* 意思列表 */
-    .meaning-list {
-        margin: 8px 0;
+    
+    .search-input {
+        font-size: 1rem;
+        padding: var(--spacing-sm) var(--spacing-md);
+        padding-right: 3.5rem;
     }
-
-    .meaning-item {
-        margin: 10px 0;
-        padding-left: 24px;
-        position: relative;
-        line-height: 1.6;
-        color: #2d3748;
+    
+    .word-title {
+        font-size: 1.5rem;
     }
-
-    .meaning-item::before {
-        content: "•";
-        position: absolute;
-        left: 8px;
-        color: #667eea;
-        font-weight: bold;
+    
+    .translation-item {
+        font-size: 1rem;
+    }
+    
+    .translation-primary {
         font-size: 1.2rem;
     }
+}
 
-    /* 例句 */
-    .example-list {
-        margin-top: 8px;
-    }
-
-    .example-sentence {
-        margin: 6px 0 6px 24px;
-        padding: 10px 14px;
-        background: rgba(0, 0, 0, 0.02);
-        border-radius: 8px;
-        font-size: 0.875rem;
-        color: #718096;
-        font-style: italic;
-        line-height: 1.5;
-        border-left: 2px solid #e2e8f0;
-    }
-
-    /* 來源標註 */
-    .source-tag {
-        margin-top: 20px;
-        text-align: center;
-        font-size: 0.75rem;
-        color: #a0aec0;
-    }
-
-    /* 響應式調整 - 詞性相關 */
-    @media (max-width: 768px) {
-        .definition-group {
-            padding: 12px;
-        }
-
-        .meaning-item {
-            padding-left: 20px;
-            font-size: 0.95rem;
-        }
-
-        .example-sentence {
-            margin-left: 20px;
-            padding: 8px 12px;
-            font-size: 0.85rem;
-        }
-
-        .phonetics {
-            display: block;
-            margin-left: 0;
-            margin-top: 8px;
-        }
-    }
-
-    /* ========================================
-   詞性和定義樣式（cdict.info 整合）
-   將以下內容添加到 style.css 的末尾
-   ======================================== */
-
-    /* 音標 */
-    .phonetics {
-        display: inline-block;
-        margin-left: 12px;
-        color: #667eea;
-        font-family: 'Courier New', monospace;
-        font-size: 1rem;
-        font-weight: normal;
-    }
-
-    /* 定義區塊 */
+/* ?踵?撘矽??- 閰抒??????*/
+@media (max-width: 768px) {
     .definition-group {
-        margin-bottom: 24px;
-        padding: 20px;
-        background: linear-gradient(135deg, rgba(103, 126, 234, 0.04) 0%, rgba(118, 75, 162, 0.02) 100%);
-        border-radius: 16px;
-        border-left: 4px solid #667eea;
-        animation: fadeIn 0.3s ease-out;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+        padding: 16px;
+        margin-bottom: 20px;
     }
-
-    /* 詞性標籤 */
-    .pos-tag {
-        display: inline-block;
-        padding: 6px 16px;
-        margin-bottom: 16px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        border-radius: 20px;
-        font-size: 0.875rem;
-        font-weight: 600;
-        letter-spacing: 0.5px;
-        box-shadow: 0 2px 8px rgba(103, 126, 234, 0.3);
-    }
-
-    /* 意思列表 */
-    .meaning-list {
-        margin: 12px 0;
-    }
-
+    
     .meaning-item {
-        margin: 12px 0;
-        padding-left: 28px;
-        position: relative;
-        line-height: 1.8;
-        color: #2d3748;
-        font-size: 1.05rem;
+        padding-left: 24px;
+        font-size: 1rem;
     }
-
+    
     .meaning-item::before {
-        content: "•";
-        position: absolute;
-        left: 10px;
-        color: #667eea;
-        font-weight: bold;
-        font-size: 1.3rem;
+        left: 8px;
+        font-size: 1.2rem;
     }
-
-    /* 例句 */
-    .example-list {
-        margin-top: 12px;
-        padding-top: 12px;
-        border-top: 1px dashed #e2e8f0;
-    }
-
+    
     .example-sentence {
-        margin: 8px 0 8px 28px;
-        padding: 12px 16px;
-        background: rgba(255, 255, 255, 0.6);
-        border-radius: 10px;
+        margin-left: 24px;
+        padding: 10px 14px;
+        font-size: 0.875rem;
+    }
+    
+    .phonetics {
+        display: block;
+        margin-left: 0;
+        margin-top: 8px;
         font-size: 0.9rem;
-        color: #718096;
-        font-style: italic;
-        line-height: 1.6;
-        border-left: 3px solid #e2e8f0;
     }
-
-    /* 來源標註 */
-    .source-tag {
-        margin-top: 24px;
-        padding-top: 16px;
-        border-top: 1px solid #e2e8f0;
-        text-align: center;
+    
+    .pos-tag {
         font-size: 0.8rem;
-        color: #a0aec0;
+        padding: 5px 14px;
     }
-
-    /* 響應式調整 - 手機版 */
-    @media (max-width: 768px) {
-        .definition-group {
-            padding: 16px;
-            margin-bottom: 20px;
-        }
-
-        .meaning-item {
-            padding-left: 24px;
-            font-size: 1rem;
-        }
-
-        .meaning-item::before {
-            left: 8px;
-            font-size: 1.2rem;
-        }
-
-        .example-sentence {
-            margin-left: 24px;
-            padding: 10px 14px;
-            font-size: 0.875rem;
-        }
-
-        .phonetics {
-            display: block;
-            margin-left: 0;
-            margin-top: 8px;
-            font-size: 0.9rem;
-        }
-
-        .pos-tag {
-            font-size: 0.8rem;
-            padding: 5px 14px;
-        }
-    }
-
-    /* fadeIn 動畫（如果 style.css 中沒有） */
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(10px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
+}
