@@ -726,3 +726,144 @@ body {
             margin-top: 8px;
         }
     }
+
+    /* ========================================
+   詞性和定義樣式（cdict.info 整合）
+   將以下內容添加到 style.css 的末尾
+   ======================================== */
+
+    /* 音標 */
+    .phonetics {
+        display: inline-block;
+        margin-left: 12px;
+        color: #667eea;
+        font-family: 'Courier New', monospace;
+        font-size: 1rem;
+        font-weight: normal;
+    }
+
+    /* 定義區塊 */
+    .definition-group {
+        margin-bottom: 24px;
+        padding: 20px;
+        background: linear-gradient(135deg, rgba(103, 126, 234, 0.04) 0%, rgba(118, 75, 162, 0.02) 100%);
+        border-radius: 16px;
+        border-left: 4px solid #667eea;
+        animation: fadeIn 0.3s ease-out;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+    }
+
+    /* 詞性標籤 */
+    .pos-tag {
+        display: inline-block;
+        padding: 6px 16px;
+        margin-bottom: 16px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 20px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        box-shadow: 0 2px 8px rgba(103, 126, 234, 0.3);
+    }
+
+    /* 意思列表 */
+    .meaning-list {
+        margin: 12px 0;
+    }
+
+    .meaning-item {
+        margin: 12px 0;
+        padding-left: 28px;
+        position: relative;
+        line-height: 1.8;
+        color: #2d3748;
+        font-size: 1.05rem;
+    }
+
+    .meaning-item::before {
+        content: "•";
+        position: absolute;
+        left: 10px;
+        color: #667eea;
+        font-weight: bold;
+        font-size: 1.3rem;
+    }
+
+    /* 例句 */
+    .example-list {
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px dashed #e2e8f0;
+    }
+
+    .example-sentence {
+        margin: 8px 0 8px 28px;
+        padding: 12px 16px;
+        background: rgba(255, 255, 255, 0.6);
+        border-radius: 10px;
+        font-size: 0.9rem;
+        color: #718096;
+        font-style: italic;
+        line-height: 1.6;
+        border-left: 3px solid #e2e8f0;
+    }
+
+    /* 來源標註 */
+    .source-tag {
+        margin-top: 24px;
+        padding-top: 16px;
+        border-top: 1px solid #e2e8f0;
+        text-align: center;
+        font-size: 0.8rem;
+        color: #a0aec0;
+    }
+
+    /* 響應式調整 - 手機版 */
+    @media (max-width: 768px) {
+        .definition-group {
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .meaning-item {
+            padding-left: 24px;
+            font-size: 1rem;
+        }
+
+        .meaning-item::before {
+            left: 8px;
+            font-size: 1.2rem;
+        }
+
+        .example-sentence {
+            margin-left: 24px;
+            padding: 10px 14px;
+            font-size: 0.875rem;
+        }
+
+        .phonetics {
+            display: block;
+            margin-left: 0;
+            margin-top: 8px;
+            font-size: 0.9rem;
+        }
+
+        .pos-tag {
+            font-size: 0.8rem;
+            padding: 5px 14px;
+        }
+    }
+
+    /* fadeIn 動畫（如果 style.css 中沒有） */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
