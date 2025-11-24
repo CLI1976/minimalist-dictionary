@@ -14,9 +14,9 @@ CORS(app)  # 允許所有來源的跨域請求
 @app.route('/api/translate', methods=['GET'])
 def translate():
     """
-    查詢單字的繁體中文翻譯和美式發音
+    查詢單字的繁體中文翻譯（cdict.info）和美式發音（Cambridge）
     參數: word (字串) - 要查詢的英文單字
-    返回: JSON 格式的翻譯列表和音檔 URL
+    返回: JSON 格式的詞性、翻譯、例句和音檔 URL
     """
     word = request.args.get('word', '').strip().lower()
     
@@ -24,29 +24,155 @@ def translate():
         return jsonify({'error': '請提供單字參數'}), 400
     
     try:
-        # 嘗試從 Cambridge Dictionary 抓取
-        translations = fetch_cambridge(word)
+        # 從 cdict.info 抓取翻譯（主要來源）
+        cdict_data = fetch_cdict(word)
+        
+        # 從 Cambridge 抓取音檔
         audio_url = fetch_audio_url(word)
         
-        if translations:
+        # 如果 cdict 有資料
+        if cdict_data['definitions']:
             return jsonify({
                 'word': word,
-                'translations': translations,
-                'audio_url': audio_url,  # 新增音檔 URL
-                'source': 'Cambridge Dictionary'
+                'phonetics': cdict_data['phonetics'],
+                'definitions': cdict_data['definitions'],
+                'audio_url': audio_url,
+                'source': 'cdict.info + Cambridge Audio'
             })
-        else:
+        
+        # 如果 cdict 失敗，回退到 Cambridge
+        cambridge_translations = fetch_cambridge(word)
+        if cambridge_translations:
             return jsonify({
                 'word': word,
-                'translations': [],
-                'audio_url': None,
-                'message': '未找到翻譯'
-            }), 404
+                'phonetics': {},
+                'definitions': [{
+                    'pos': '翻譯',
+                    'meanings': cambridge_translations,
+                    'examples': []
+                }],
+                'audio_url': audio_url,
+                'source': 'Cambridge Dictionary (fallback)'
+            })
+        
+        # 都失敗
+        return jsonify({
+            'word': word,
+            'phonetics': {},
+            'definitions': [],
+            'audio_url': audio_url,
+            'message': '未找到翻譯'
+        }), 404
             
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
 
+
+
+
+
+def fetch_cdict(word):
+    """
+    從 cdict.info 抓取詳細翻譯、詞性和例句
+    資料來源：cdict.info 天火字典
+    """
+    url = f'https://cdict.info/query/{word}'
+    
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+    }
+    
+    try:
+        response = requests.get(url, headers=headers, timeout=10)
+        response.raise_for_status()
+        
+        soup = BeautifulSoup(response.text, 'html.parser')
+        text = soup.get_text()
+        
+        result = {
+            'phonetics': {},
+            'definitions': []
+        }
+        
+        # 提取 KK 音標
+        kk_match = re.search(r'KK 音標〔\s*([^\]〕]+)\s*〕', text)
+        if kk_match:
+            result['phonetics']['kk'] = kk_match.group(1).strip()
+        
+        # 提取詞性和定義
+        # 找「【詞性】」標記
+        pos_pattern = r'【(不及物動詞|及物動詞|形容詞|名詞|副詞|感嘆詞|動詞|代名詞|連接詞|介系詞)】([^【]+?)(?=【|返回|$)'
+        
+        matches = re.finditer(pos_pattern, text, re.DOTALL)
+        
+        for match in matches:
+            pos = match.group(1)
+            content = match.group(2)
+            
+            meanings = []
+            examples = []
+            
+            # 按數字編號分割定義
+            # 格式: "1 翻譯  例句  2 翻譯  例句"
+            items = re.split(r'(?=\d+\s+[^\d])', content)
+            
+            for item in items:
+                item = item.strip()
+                if not item or not re.match(r'^\d+', item):
+                    continue
+                
+                # 移除開頭的數字
+                item = re.sub(r'^\d+\s+', '', item)
+                
+                # 分離中文翻譯和英文例句
+                # 策略：中文在前，遇到全大寫開頭的英文單詞可能是例句
+                
+                # 先提取所有句子（包含中英文）
+                sentences = item.split('  ')  # cdict 用兩個空格分隔
+                
+                for sent in sentences:
+                    sent = sent.strip()
+                    if not sent:
+                        continue
+                    
+                    # 判斷是翻譯還是例句
+                    # 如果包含中文且以中文開頭，是翻譯
+                    if re.match(r'[\u4e00-\u9fff]', sent):
+                        # 提取純中文部分（翻譯）
+                        pure_chinese = re.split(r'\s+[A-Z]', sent)[0]
+                        pure_chinese = pure_chinese.strip().rstrip('，；。、')
+                        
+                        if pure_chinese and len(pure_chinese) <= 40:
+                            meanings.append(pure_chinese)
+                    
+                    # 如果以大寫英文字母開頭，可能是例句
+                    if re.match(r'[A-Z]', sent):
+                        # 提取英文句子（以句點、問號、驚嘆號結尾）
+                        example_match = re.search(r'([A-Z][^。]*?[.!?])', sent)
+                        if example_match:
+                            examples.append(example_match.group(1).strip())
+            
+            # 去重並限制數量
+            unique_meanings = []
+            seen = set()
+            for m in meanings:
+                if m not in seen and len(unique_meanings) < 5:
+                    seen.add(m)
+                    unique_meanings.append(m)
+            
+            if unique_meanings:
+                result['definitions'].append({
+                    'pos': pos,
+                    'meanings': unique_meanings,
+                    'examples': examples[:3]
+                })
+        
+        return result
+        
+    except requests.RequestException as e:
+        print(f'Error fetching from cdict: {e}')
+        return {'phonetics': {}, 'definitions': []}
 
 
 def fetch_audio_url(word):
