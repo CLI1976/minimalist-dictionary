@@ -17,103 +17,9 @@ const basicDict = {
     'welcome': ['歡迎', '歡迎光臨'],
     'yes': ['是', '對', '好'],
     'no': ['不', '否', '不是'],
-    'sorry': ['抱歉', '對不起', '很遺憾'],
-    'help': ['幫助', '協助', '救助'],
-    'good': ['好', '良好', '優秀'],
-    'bad': ['壞', '不好', '糟糕'],
-    'beautiful': ['美麗', '漂亮', '美好'],
-    'happy': ['快樂', '高興', '幸福'],
-    'sad': ['悲傷', '難過', '傷心'],
-    'water': ['水', '水分'],
-    'food': ['食物', '食品'],
-    'home': ['家', '家庭', '住所'],
-    'school': ['學校', '學院'],
-    'work': ['工作', '職業', '勞動'],
-    'play': ['玩', '遊戲', '演奏'],
-    'music': ['音樂', '樂曲'],
-    'art': ['藝術', '美術'],
-    'science': ['科學', '自然科學'],
     'cat': ['貓', '貓咪'],
     'dog': ['狗', '犬'],
     'car': ['汽車', '轎車'],
-    'phone': ['電話', '手機'],
-    'today': ['今天', '今日'],
-    'tomorrow': ['明天', '明日'],
-    'yesterday': ['昨天', '昨日'],
-    'morning': ['早晨', '上午'],
-    'night': ['夜晚', '晚上'],
-    'day': ['白天', '日子'],
-    'sun': ['太陽', '陽光'],
-    'moon': ['月亮', '月球'],
-    'star': ['星星', '恆星'],
-    'sky': ['天空', '天'],
-    'sea': ['海', '海洋'],
-    'mountain': ['山', '山脈'],
-    'river': ['河', '河流'],
-    'tree': ['樹', '樹木'],
-    'flower': ['花', '花朵'],
-    'rain': ['雨', '下雨'],
-    'snow': ['雪', '下雪'],
-    'wind': ['風', '風力'],
-    'hot': ['熱', '炎熱'],
-    'cold': ['冷', '寒冷'],
-    'big': ['大', '巨大'],
-    'small': ['小', '微小'],
-    'new': ['新的', '新穎'],
-    'old': ['舊的', '古老'],
-    'young': ['年輕', '青春'],
-    'man': ['男人', '男性'],
-    'woman': ['女人', '女性'],
-    'boy': ['男孩', '少年'],
-    'girl': ['女孩', '少女'],
-    'father': ['父親', '爸爸'],
-    'mother': ['母親', '媽媽'],
-    'son': ['兒子'],
-    'daughter': ['女兒'],
-    'brother': ['兄弟', '哥哥/弟弟'],
-    'sister': ['姐妹', '姐姐/妹妹'],
-    'family': ['家庭', '家族'],
-    'eat': ['吃', '進食'],
-    'drink': ['喝', '飲用'],
-    'sleep': ['睡覺', '休息'],
-    'walk': ['走', '步行'],
-    'run': ['跑', '奔跑'],
-    'read': ['讀', '閱讀'],
-    'write': ['寫', '書寫'],
-    'speak': ['說', '講話'],
-    'listen': ['聽', '傾聽'],
-    'see': ['看見', '看到'],
-    'watch': ['觀看', '注視'],
-    'study': ['學習', '研究'],
-    'teach': ['教', '教導'],
-    'learn': ['學', '學習'],
-    'know': ['知道', '了解'],
-    'understand': ['理解', '明白'],
-    'think': ['想', '思考'],
-    'feel': ['感覺', '感受'],
-    'believe': ['相信', '信任'],
-    'hope': ['希望', '期望'],
-    'want': ['想要', '需要'],
-    'need': ['需要', '必須'],
-    'like': ['喜歡', '愛好'],
-    'red': ['紅色', '紅的'],
-    'blue': ['藍色', '藍的'],
-    'green': ['綠色', '綠的'],
-    'yellow': ['黃色', '黃的'],
-    'black': ['黑色', '黑的'],
-    'white': ['白色', '白的'],
-    'orange': ['橙色', '橘色'],
-    'purple': ['紫色', '紫的'],
-    'one': ['一', '壹'],
-    'two': ['二', '貳', '兩'],
-    'three': ['三', '參'],
-    'four': ['四', '肆'],
-    'five': ['五', '伍'],
-    'six': ['六', '陸'],
-    'seven': ['七', '柒'],
-    'eight': ['八', '捌'],
-    'nine': ['九', '玖'],
-    'ten': ['十', '拾'],
 };
 
 // ========================================
@@ -176,9 +82,9 @@ async function handleSearch() {
 // Fetch Translation
 // ========================================
 async function fetchTranslation(word) {
-    // 方法1: 嘗試從後端 API 獲取（Cambridge Dictionary）
+    // 方法1: 嘗試從後端 API 獲取（Yahoo + Cambridge）
     try {
-        const apiUrl = `http://localhost:5000/api/translate?word=${encodeURIComponent(word)}`;
+        const apiUrl = `https://web-production-0d0e6.up.railway.app/api/translate?word=${encodeURIComponent(word)}`;
         const response = await fetch(apiUrl);
 
         if (response.ok) {
@@ -188,8 +94,9 @@ async function fetchTranslation(word) {
             currentAudioUrl = data.audio_url || null;
             console.log('Audio URL:', currentAudioUrl);
 
-            if (data.translations && data.translations.length > 0) {
-                return data.translations;
+            // 返回完整的 data 物件
+            if (data.definitions && data.definitions.length > 0) {
+                return data;
             }
         }
     } catch (error) {
@@ -197,40 +104,115 @@ async function fetchTranslation(word) {
         currentAudioUrl = null;
     }
 
-    // 方法2: 使用內建字典
+    // 方法2: 使用內建字典（轉換為新格式）
     if (basicDict[word]) {
         currentAudioUrl = null;
-        return basicDict[word];
+        return {
+            word: word,
+            phonetics: {},
+            definitions: [{
+                pos: '翻譯',
+                meanings: basicDict[word],
+                examples: []
+            }],
+            source: '內建字典'
+        };
     }
 
     // 方法3: 所有方法都失敗
     currentAudioUrl = null;
-    return [
-        `❌ 未找到「${word}」的翻譯`,
-        '💡 提示：',
-        '1. 確認後端服務器是否運行',
-        '2. 檢查單字拼寫',
-        '3. 嘗試其他單字'
-    ];
+    return {
+        word: word,
+        phonetics: {},
+        definitions: [{
+            pos: '提示',
+            meanings: [
+                `❌ 未找到「${word}」的翻譯`,
+                '💡 建議：',
+                '1. 確認後端服務器是否運行',
+                '2. 檢查單字拼寫',
+                '3. 嘗試其他單字'
+            ],
+            examples: []
+        }]
+    };
 }
 
 // ========================================
 // Display Results
 // ========================================
-function displayResult(word, translationList) {
+function displayResult(word, data) {
     hideLoading();
     showResultContainer();
 
-    wordTitle.textContent = word.charAt(0).toUpperCase() + word.slice(1);
+    // 顯示單字標題和音標
+    let titleHTML = word.charAt(0).toUpperCase() + word.slice(1);
 
+    // 添加音標（如果有）
+    if (data.phonetics && data.phonetics.kk) {
+        titleHTML += `<span class="phonetics">KK [${data.phonetics.kk}]</span>`;
+    }
+
+    wordTitle.innerHTML = titleHTML;
+
+    // 清空翻譯區域
     translations.innerHTML = '';
 
-    translationList.forEach((translation, index) => {
-        const span = document.createElement('span');
-        span.className = index === 0 ? 'translation-item translation-primary' : 'translation-item';
-        span.textContent = translation;
-        translations.appendChild(span);
-    });
+    // 處理新格式（Yahoo + Cambridge）
+    if (data.definitions && data.definitions.length > 0) {
+        // 按詞性顯示翻譯
+        data.definitions.forEach(def => {
+            // 創建定義區塊
+            const groupDiv = document.createElement('div');
+            groupDiv.className = 'definition-group';
+
+            // 詞性標籤
+            const posTag = document.createElement('div');
+            posTag.className = 'pos-tag';
+            posTag.textContent = def.pos;
+            groupDiv.appendChild(posTag);
+
+            // 意思列表
+            if (def.meanings && def.meanings.length > 0) {
+                const meaningList = document.createElement('div');
+                meaningList.className = 'meaning-list';
+
+                def.meanings.forEach(meaning => {
+                    const meaningDiv = document.createElement('div');
+                    meaningDiv.className = 'meaning-item';
+                    meaningDiv.textContent = meaning;
+                    meaningList.appendChild(meaningDiv);
+                });
+
+                groupDiv.appendChild(meaningList);
+            }
+
+            // 例句列表
+            if (def.examples && def.examples.length > 0) {
+                const exampleList = document.createElement('div');
+                exampleList.className = 'example-list';
+
+                def.examples.forEach(example => {
+                    const exampleDiv = document.createElement('div');
+                    exampleDiv.className = 'example-sentence';
+                    exampleDiv.textContent = example;
+                    exampleList.appendChild(exampleDiv);
+                });
+
+                groupDiv.appendChild(exampleList);
+            }
+
+            translations.appendChild(groupDiv);
+        });
+    }
+
+    // 顯示來源標註
+    if (data.source) {
+        const sourceTag = document.createElement('div');
+        sourceTag.className = 'source-tag';
+        sourceTag.textContent = `資料來源：${data.source}`;
+        translations.appendChild(sourceTag);
+    }
 }
 
 // ========================================

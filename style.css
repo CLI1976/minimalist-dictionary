@@ -13,29 +13,29 @@
     --color-border: #E5E7EB;
     --color-shadow: rgba(0, 0, 0, 0.05);
     --color-shadow-hover: rgba(0, 0, 0, 0.1);
-    
+
     /* Gradients */
     --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    --gradient-subtle: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.8) 100%);
-    
+    --gradient-subtle: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%);
+
     /* Spacing */
     --spacing-xs: 0.5rem;
     --spacing-sm: 1rem;
     --spacing-md: 1.5rem;
     --spacing-lg: 2rem;
     --spacing-xl: 3rem;
-    
+
     /* Border Radius */
     --radius-sm: 8px;
     --radius-md: 12px;
     --radius-lg: 16px;
     --radius-full: 9999px;
-    
+
     /* Transitions */
     --transition-fast: 150ms ease;
     --transition-base: 250ms ease;
     --transition-slow: 350ms ease;
-    
+
     /* Typography */
     --font-sans: 'Inter', 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
     --font-weight-light: 300;
@@ -297,7 +297,9 @@ body {
 }
 
 @keyframes spin {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 /* ========================================
@@ -349,8 +351,15 @@ body {
 }
 
 @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
 }
 
 /* ========================================
@@ -360,71 +369,360 @@ body {
     text-align: center;
     padding: var(--spacing-lg) 0;
     color: var(--color-text-secondary);
-    font-size: 0.875rem;
-    border-top: 1px solid var(--color-border);
-    margin-top: var(--spacing-xl);
-}
 
-.footer a {
-    color: var(--color-primary);
-    text-decoration: none;
-    transition: color var(--transition-fast);
-}
-
-.footer a:hover {
-    color: var(--color-primary-dark);
-    text-decoration: underline;
-}
-
-/* ========================================
-   Animations
+    /* ========================================
+   Main Content
    ======================================== */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
+    .main {
+        flex: 1;
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
 
-/* ========================================
+    /* ========================================
+   Result Container
+   ======================================== */
+    .result-container {
+        animation: fadeIn var(--transition-base);
+    }
+
+    .result-container.hidden {
+        display: none;
+    }
+
+    .result-card {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        padding: var(--spacing-lg);
+        box-shadow: 0 4px 20px var(--color-shadow);
+        border: 1px solid var(--color-border);
+    }
+
+    .word-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: var(--spacing-md);
+        padding-bottom: var(--spacing-md);
+        border-bottom: 2px solid var(--color-border);
+    }
+
+    .word-title {
+        font-size: 2rem;
+        font-weight: var(--font-weight-bold);
+        color: var(--color-text);
+        margin: 0;
+    }
+
+    .pronounce-btn {
+        width: 48px;
+        height: 48px;
+        border: none;
+        border-radius: var(--radius-full);
+        background: linear-gradient(135deg, #667eea22 0%, #764ba222 100%);
+        color: var(--color-primary);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all var(--transition-base);
+        flex-shrink: 0;
+    }
+
+    .pronounce-btn:hover {
+        background: linear-gradient(135deg, #667eea33 0%, #764ba233 100%);
+        transform: scale(1.1);
+    }
+
+    .pronounce-btn:active {
+        transform: scale(0.95);
+    }
+
+    /* ========================================
+   Translations
+   ======================================== */
+    .translations {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--spacing-sm);
+        margin-top: var(--spacing-md);
+    }
+
+    .translation-item {
+        padding: var(--spacing-sm) var(--spacing-md);
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        border-radius: var(--radius-md);
+        font-size: 1.1rem;
+        color: var(--color-text);
+        transition: all var(--transition-fast);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .translation-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px var(--color-shadow-hover);
+    }
+
+    .translation-primary {
+        font-size: 1.3rem;
+        font-weight: var(--font-weight-semibold);
+        background: var(--gradient-primary);
+        color: white;
+    }
+
+    /* ========================================
+   Loading State
+   ======================================== */
+    .loading {
+        text-align: center;
+        padding: var(--spacing-xl);
+        color: var(--color-text-secondary);
+    }
+
+    .loading.hidden {
+        display: none;
+    }
+
+    .spinner {
+        width: 40px;
+        height: 40px;
+        margin: 0 auto var(--spacing-sm);
+        border: 3px solid var(--color-border);
+        border-top-color: var(--color-primary);
+        border-radius: var(--radius-full);
+        animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    /* ========================================
+   Error State
+   ======================================== */
+    .error {
+        padding: var(--spacing-md);
+        background: #FEE2E2;
+        color: #DC2626;
+        border-radius: var(--radius-md);
+        border-left: 4px solid #DC2626;
+        margin-top: var(--spacing-md);
+    }
+
+    .error.hidden {
+        display: none;
+    }
+
+    /* ========================================
+   Welcome Message
+   ======================================== */
+    .welcome-message {
+        text-align: center;
+        padding: var(--spacing-xl) var(--spacing-md);
+        color: var(--color-text-secondary);
+        animation: fadeIn var(--transition-slow);
+    }
+
+    .welcome-message.hidden {
+        display: none;
+    }
+
+    .welcome-icon {
+        font-size: 4rem;
+        margin-bottom: var(--spacing-md);
+        animation: float 3s ease-in-out infinite;
+    }
+
+    .welcome-message h3 {
+        font-size: 1.5rem;
+        font-weight: var(--font-weight-semibold);
+        color: var(--color-text);
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .welcome-message p {
+        font-size: 1rem;
+        line-height: 1.8;
+    }
+
+    @keyframes float {
+
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-10px);
+        }
+    }
+
+    /* ========================================
+   Footer
+   ======================================== */
+    .footer {
+        text-align: center;
+        padding: var(--spacing-lg) 0;
+        color: var(--color-text-secondary);
+        font-size: 0.875rem;
+        border-top: 1px solid var(--color-border);
+        margin-top: var(--spacing-xl);
+    }
+
+    .footer a {
+        color: var(--color-primary);
+        text-decoration: none;
+        transition: color var(--transition-fast);
+    }
+
+    .footer a:hover {
+        color: var(--color-primary-dark);
+        text-decoration: underline;
+    }
+
+    /* ========================================
    Responsive Design
    ======================================== */
-@media (max-width: 640px) {
-    .container {
-        padding: var(--spacing-md) var(--spacing-sm);
+    @media (max-width: 640px) {
+        .container {
+            padding: var(--spacing-md) var(--spacing-sm);
+        }
+
+        .header {
+            padding: var(--spacing-lg) 0;
+        }
+
+        .logo {
+            font-size: 1.75rem;
+        }
+
+        .icon {
+            font-size: 2rem;
+        }
+
+        .search-input {
+            font-size: 1rem;
+            padding: var(--spacing-sm) var(--spacing-md);
+            padding-right: 3.5rem;
+        }
+
+        .word-title {
+            font-size: 1.5rem;
+        }
+
+        .translation-item {
+            font-size: 1rem;
+        }
+
+        .translation-primary {
+            font-size: 1.2rem;
+        }
     }
-    
-    .header {
-        padding: var(--spacing-lg) 0;
+
+    /* ========================================
+   詞性和定義樣式（cdict 整合）
+   ======================================== */
+
+    /* 音標 */
+    .phonetics {
+        display: inline-block;
+        margin-left: 12px;
+        color: #667eea;
+        font-family: 'Courier New', monospace;
+        font-size: 0.95rem;
+        font-weight: normal;
     }
-    
-    .logo {
-        font-size: 1.75rem;
+
+    /* 定義區塊 */
+    .definition-group {
+        margin-bottom: 20px;
+        padding: 16px;
+        background: rgba(103, 126, 234, 0.03);
+        border-radius: 12px;
+        border-left: 3px solid #667eea;
+        animation: fadeIn 0.3s ease-out;
     }
-    
-    .icon {
-        font-size: 2rem;
+
+    /* 詞性標籤 */
+    .pos-tag {
+        display: inline-block;
+        padding: 4px 12px;
+        margin-bottom: 12px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 16px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
     }
-    
-    .search-input {
-        font-size: 1rem;
-        padding: var(--spacing-sm) var(--spacing-md);
-        padding-right: 3.5rem;
+
+    /* 意思列表 */
+    .meaning-list {
+        margin: 8px 0;
     }
-    
-    .word-title {
-        font-size: 1.5rem;
+
+    .meaning-item {
+        margin: 10px 0;
+        padding-left: 24px;
+        position: relative;
+        line-height: 1.6;
+        color: #2d3748;
     }
-    
-    .translation-item {
-        font-size: 1rem;
-    }
-    
-    .translation-primary {
+
+    .meaning-item::before {
+        content: "•";
+        position: absolute;
+        left: 8px;
+        color: #667eea;
+        font-weight: bold;
         font-size: 1.2rem;
     }
-}
+
+    /* 例句 */
+    .example-list {
+        margin-top: 8px;
+    }
+
+    .example-sentence {
+        margin: 6px 0 6px 24px;
+        padding: 10px 14px;
+        background: rgba(0, 0, 0, 0.02);
+        border-radius: 8px;
+        font-size: 0.875rem;
+        color: #718096;
+        font-style: italic;
+        line-height: 1.5;
+        border-left: 2px solid #e2e8f0;
+    }
+
+    /* 來源標註 */
+    .source-tag {
+        margin-top: 20px;
+        text-align: center;
+        font-size: 0.75rem;
+        color: #a0aec0;
+    }
+
+    /* 響應式調整 - 詞性相關 */
+    @media (max-width: 768px) {
+        .definition-group {
+            padding: 12px;
+        }
+
+        .meaning-item {
+            padding-left: 20px;
+            font-size: 0.95rem;
+        }
+
+        .example-sentence {
+            margin-left: 20px;
+            padding: 8px 12px;
+            font-size: 0.85rem;
+        }
+
+        .phonetics {
+            display: block;
+            margin-left: 0;
+            margin-top: 8px;
+        }
+    }
